@@ -114,6 +114,7 @@ class mysql::server (
   Optional[String[1]]                                                   $mycnf_owner             = undef,
   Optional[String[1]]                                                   $mycnf_group             = undef,
   Variant[String, Sensitive[String]]                                    $root_password           = 'UNSET',
+  Optional[String[1]]                                                   $root_plugin             = undef,
   Variant[Boolean, String[1]]                                           $service_enabled         = true,
   Variant[Boolean, String[1]]                                           $service_manage          = true,
   String[1]                                                             $service_name            = $mysql::params::server_service_name,

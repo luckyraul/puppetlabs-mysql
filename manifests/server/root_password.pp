@@ -17,6 +17,7 @@ class mysql::server::root_password {
 
   $options = $mysql::server::_options
   $login_file = $mysql::server::login_file
+  $plugin = $mysql::server::root_plugin
 
   # New installations of MySQL will configure a default random password for the root user
   # with an expiration. No actions can be performed until this password is changed. The
@@ -30,9 +31,14 @@ class mysql::server::root_password {
 
   # manage root password if it is set
   if $mysql::server::create_root_user and $root_password_set {
+    if $plugin == 'caching_sha2_password' {
+      $hash = mysql::caching_sha2_password($root_password)
+    } else {
+      $hash = mysql::password($mysql::server::root_password)
+    }
     mysql_user { 'root@localhost':
       ensure        => present,
-      password_hash => mysql::password($mysql::server::root_password),
+      password_hash => $hash,
       require       => Exec['remove install pass'],
     }
   }
